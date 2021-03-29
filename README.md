@@ -25,3 +25,8 @@
 - 4-webpack/3-optimazation: 웹팩 최적화 실습
 - 
 - master: 최종 결과물 
+
+
+npm webpack -v
+  "webpack": "^4.41.5",
+  "webpack-cli": "^3.3.10"
