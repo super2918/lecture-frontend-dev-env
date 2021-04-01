@@ -1,9 +1,12 @@
 const path = require("path");
 const webpack = require("webpack");
+
 const chilPross = require("child_process");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+process.env.NODE_ENV = process.env.NODE_ENV || "development"
 
 module.exports = {
   mode: "development",
@@ -18,7 +21,11 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: [
+          process.env.NODE_ENV === 'production'
+          ? MiniCssExtractPlugin.loader 
+          : "style-loader", "css-loader"
+        ]
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
@@ -41,10 +48,21 @@ module.exports = {
       }
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html', 
+      template: "./src/index.html",
+      templateParameters: {
+        env: process.env.NODE_ENV === "development" ? '개발용' : ''
+      },
+      minify: process.env.NODE_ENV === "production" ? {
+        collapseWhitespace: true, 
+        removeComments: true,
+        hase: true,
+      } : false
     }),
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({ filename: `[name].css`})
+    ...(process.env.NODE_ENV === 'production' 
+      ? [ new MiniCssExtractPlugin({ filename: `[name].css`})]  
+      : []
+    )
   ]
   /**
    * TODO: 아래 플러그인을 추가해서 번들 결과를 만들어 보세요.
