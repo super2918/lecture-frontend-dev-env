@@ -19,7 +19,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.s[ac]ss$/,
         use: [
           /**
            * TODO: SASS 코드를 사용할수 있겠끔 sass-loader를 구성하세요.
@@ -27,7 +27,8 @@ module.exports = {
           process.env.NODE_ENV === "production"
             ? MiniCssExtractPlugin.loader // 프로덕션 환경
             : "style-loader", // 개발 환경
-          "css-loader"
+          "css-loader",
+          "sass-loader"
         ]
       },
       {
@@ -41,7 +42,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader" 
+        use: ["babel-loader"]
       }
     ]
   },
@@ -61,7 +62,7 @@ module.exports = {
               removeComments: true // 주석 제거
             }
           : false,
-      hash: process.env.NODE_ENV === "production"
+      hash: process.env.NODE_ENV === "production",
     }),
     new CleanWebpackPlugin(),
     ...(process.env.NODE_ENV === "production"
